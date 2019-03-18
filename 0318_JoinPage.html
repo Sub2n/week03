@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Post Code</title>
+    <title>Sign Up Page</title>
 
     <style>
         div.container {
@@ -99,8 +99,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">주소 & 상세주소</span>
                 </div>
-                <input id="address" type="text" aria-label="Address" class="form-control">
-                <input id="address-detail" type="text" aria-label="Address-detail" class="form-control">
+                <input id="address" type="text" placeholder="시 / 구 / 동" aria-label="Address" class="form-control">
+                <input id="address-detail" type="text" placeholder="번지수 / 동호수" aria-label="Address-detail" class="form-control">
             </div>
             
             <button type="submit" id="join-submit" class="btn btn-outline-secondary">회원가입 확인</button>
@@ -135,7 +135,7 @@
 
                 var reg_zc = /^\d{5}/;   // 5글자 우편번호
 
-                var reg_bname = /[동|로|가]$/g; //법정동
+                var reg_addr = /[동|로|가]$/g; //법정동
 
                 if($('#id').val() == '') {
 
@@ -193,12 +193,10 @@
                     return false;
                 }
 
-                if(!reg_bname.test($('#address').val())) {
-                    alert("유효한 신우편번호를 입력하세요.");
+                if(!reg_addr.test($('#address').val())) {
+                    alert("유효한 주소를 입력하세요. (시/구/동)");
                     return false;
                 }
-
-                
 
                 /* var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
                 alert(result);

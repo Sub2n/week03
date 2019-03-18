@@ -29,8 +29,21 @@
             width: 5%;
         }
 
+        .header {
+            text-align: center;
+            padding: 1%;
+        }
+
+        .header h1 {
+            font-family: 'Do Hyeon', sans-serif;
+        }
+
+        #join-submit {
+            margin-top: 2%;
+        }
     </style>
 
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -54,8 +67,11 @@
 
 
     -->
+    <div class="header">
+        <h1>회원가입 창</h1>
+    </div>
     <div class="container">
-        <form action = " " method="post" id="join-form">
+        <form autocomplete="off" action = " " method="post" id="join-form">
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend">
                     <span class="input-group-text">아이디(Email)</span>
@@ -117,7 +133,9 @@
                 */
                 var reg_id = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;    //email 형식 id 정규식
 
+                var reg_zc = /^\d{5}/;   // 5글자 우편번호
 
+                var reg_bname = /[동|로|가]$/g; //법정동
 
                 if($('#id').val() == '') {
 
@@ -150,8 +168,41 @@
                     return false;
                 }
 
-                var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
+                if(!reg_id.test($('#id').val())) {
+                    alert("올바른 email형식 ID를 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_pw.test($('#pw').val())) {
+                    alert("숫자와 문자 포함 형태의 6~12자리 이내의 비밀번호를 입력하세요");
+                    return false;
+                }
+
+                if(!reg_name.test($('#name').val())) {
+                    alert("2~4글자 사이의 한글 이름을 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_name.test($('#name').val())) {
+                    alert("2~4글자 사이의 한글 이름을 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_zc.test($('#zipcode').val())) {
+                    alert("유효한 신우편번호를 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_bname.test($('#address').val())) {
+                    alert("유효한 신우편번호를 입력하세요.");
+                    return false;
+                }
+
+                
+
+                /* var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
                 alert(result);
+                */
                 return false;
             });
         });

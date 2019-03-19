@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TO DO LIST</title>
+    <style>
+
+        body {
+            background: #ffffc9 !important;
+        }
+
+        body .header {
+            width:50% ;
+            margin: 0 auto;
+            text-align:center;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            color: rgb(63,81,181);
+            
+        }
+        
+        body .container {
+            width: 50%;
+            margin: 0 auto;
+            
+        }
+
+        .demo-list-radio {
+            display: inline;
+        }
+
+        .todo {
+            width: 100%;
+            margin: 0 auto;
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .ing {
+            width: 100%;
+            margin: 0 auto;
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .completed {
+            width: 100%;
+            margin: 0 auto;
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        input.form-control {
+            height: 36px;
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Roboto);
+        .md-checkbox {
+        position: relative;
+        margin: 1em 0;
+        text-align: left;
+        }
+        .md-checkbox.md-checkbox-inline {
+        display: inline-block;
+        }
+        .md-checkbox label {
+        cursor: pointer;
+        display: inline;
+        line-height: 1.25em;
+        vertical-align: top;
+        clear: both;
+        padding-left: 1px;
+        }
+        .md-checkbox label:not(:empty) {
+        padding-left: 0.75em;
+        }
+        .md-checkbox label:before, .md-checkbox label:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        }
+        .md-checkbox label:before {
+        width: 1.25em;
+        height: 1.25em;
+        background: #fff;
+        border: 2px solid rgba(0, 0, 0, 0.54);
+        border-radius: 0.125em;
+        cursor: pointer;
+        transition: background 0.3s;
+        }
+        .md-checkbox input[type="checkbox"] {
+        outline: 0;
+        visibility: hidden;
+        width: 1.25em;
+        margin: 0;
+        display: block;
+        float: left;
+        font-size: inherit;
+        }
+        .md-checkbox input[type="checkbox"]:checked + label:before {
+        background: #337ab7;
+        border: none;
+        }
+        .md-checkbox input[type="checkbox"]:checked + label:after {
+        transform: translate(0.25em, 0.3365384615em) rotate(-45deg);
+        width: 0.75em;
+        height: 0.375em;
+        border: 0.125em solid #fff;
+        border-top-style: none;
+        border-right-style: none;
+        }
+        .md-checkbox input[type="checkbox"]:disabled + label:before {
+        border-color: rgba(0, 0, 0, 0.26);
+        }
+        .md-checkbox input[type="checkbox"]:disabled:checked + label:before {
+        background: rgba(0, 0, 0, 0.26);
+        }
+
+        *,
+        *:before,
+        *:after {
+        box-sizing: border-box;
+        }
+
+        body {
+        background: #f0f0f0;
+        position: absolute;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+        color: #333;
+        font-size: 16px;
+        }
+
+        section {
+        background: white;
+        margin: 0 auto;
+        padding: 4em;
+        max-width: 800px;
+        }
+        section h1 {
+        margin: 0 0 2em;
+        }
+
+        li.sample-item {
+            display: none;
+        }
+
+        input.form-control.edit-form {
+            display: none;
+        }
+
+        .demo-card-event.mdl-card {
+            width: 500px;
+            height: 256px;
+            background: #3E4EB8;
+        }
+        .demo-card-event > .mdl-card__actions {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .demo-card-event > .mdl-card__title {
+            align-items: flex-start;
+        }
+        .demo-card-event > .mdl-card__title > h4 {
+          margin-top: 0;
+        }
+        .demo-card-event > .mdl-card__actions {
+            display: flex;
+            box-sizing:border-box;
+            align-items: center;
+        }
+        .demo-card-event > .mdl-card__actions > .material-icons {
+            padding-right: 10px;
+        }
+        .demo-card-event > .mdl-card__title,
+        .demo-card-event > .mdl-card__actions,
+        .demo-card-event > .mdl-card__actions > .mdl-button {
+            color: #3E4EB8;
+        }
+
+        h1 {
+            font-family: 'Ubuntu', sans-serif !important;
+            font-weight: 600 !important;
+            line-height: 1.5em;
+        }
+
+        span.mdl-list__item-primary-content {
+            font-family: 'Nanum Gothic', sans-serif !important;    
+            font-weight: 550 !important;
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="header">
+        <h1>To Do List</h1>
+    </div>
+    
+    <div class="container">
+        <div id="input-form">
+            <div class="input-group mb-3">
+                <input id="input" type="text" class="form-control" placeholder="Add Something To Do" aria-label="What to do" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button id ="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+                        ADD
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+                <a href="#all-panel" class="mdl-tabs__tab is-active">ALL</a>
+                <a href="#ing-panel" class="mdl-tabs__tab">ING</a>
+                <a href="#completed-panel" class="mdl-tabs__tab">COMPLETED</a>
+            </div>
+            <div class="mdl-tabs__panel is-active" id="all-panel">
+                <ul id="todo" class="mdl-list">
+                    <li id="list" class="mdl-list__item sample-item">
+                        <span class="mdl-list__item-primary-content">
+                        </span>
+                        <input type="text" class="form-control edit-form" placeholder="Edit" aria-label="What to do" aria-describedby="button-addon2">
+                        <span class="mdl-list__item-secondary-action">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-1">
+                            <input type="checkbox" id="list-checkbox-1" class="mdl-checkbox__input" unchecked />
+                        </label>
+                        </span>
+                        <span class="mdl-list__item-third-action">
+                            <button id ="delete-btn" class="smlie-delete mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </span>
+                    </li>
+                </ul>  
+            </div>
+            <div class="mdl-tabs__panel" id="ing-panel">
+                <ul id="ing" class="mdl-list">
+                    
+                </ul>
+            </div>
+            <div class="mdl-tabs__panel" id="completed-panel">
+                <ul id="completed" class="mdl-list">
+                    
+                </ul>
+            </div>  
+        </div>
+    </div>
+
+
+
+    <dialog class="mdl-dialog">
+        <div class="mdl-dialog__content">
+            <form action="#">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id ="edit-text" class="mdl-textfield__input" type="text" id="sample3">
+                    <label class="mdl-textfield__label" for="sample3">Edit what to do...</label>
+                </div>
+            </form>
+        </div>
+        <button id="close-btn" type="button" class="mdl-button close">Edit</button>
+    </dialog>
+
+    
+    <script type="text/javascript">
+        var i = 1;
+        var storage_key = "todos";
+        /*
+            function : 명령어. 단독으로 실행
+            내가 자주 사용하는 code block을 원하는 만큼의 단위로 쪼개서 명령어처럼 만들어두는 것
+
+            function funcName(매개변수){
+                [내가 실행할 코드블록]
+            }
+
+            method : class나 instance의 내부 함수를 호출하는 경우
+            JSON.stringify(); 등
+
+        */
+
+        /*
+        상태 변할 때마다 localStorage에 저장해야할 것
+
+        : saveTodo()
+        한 li 당
+
+        1. 속해있는 상위 ul id (#todo, #ing, #completed)
+        2. li의 id
+        3. span input
+        4. checkbox, for id
+        5. checkbox에 is-checked class 여부
+        6. delete btn id
+
+
+        : loadTodo()
+        알맞는 ul : #todo, #ing, #completed에 li붙여주기만 하면 됨
+        1. 
+        */
+        
+        function saveTodo(){
+            var todos = {};
+            todos['todo'] = $('#todo').html();
+            todos['ing'] = $('#ing').html();
+            todos['completed'] = $('#completed').html();
+
+            var todos_string = JSON.stringify(todos);
+            localStorage.setItem(storage_key, todos_string);
+        }
+
+        function loadTodo(){
+            var todos_string = localStorage.getItem(storage_key);
+            if(todos_string != null){
+                var todos = JSON.parse(todos_string);
+                for(var key in todos){
+                    $('#'+key).html(todos[key]);
+                }
+            }
+        }
+
+        /*
+            $(document).on('click', '.tt', function(){});
+        */ 
+
+        $(document).ready(function(){
+            loadTodo();
+
+            // Todo ADD
+            $('#submit').click( function(){
+                i++;
+                new_todo = $('#input').val();
+                //sample li clone
+                new_item = $('li.sample-item').clone(true);
+                new_item.removeClass('sample-item');
+                //li에 id 부여
+                new_item.attr('id', "list-"+i);
+                //li의 span에 input.val 넣음
+                new_item.find('.mdl-list__item-primary-content').append(new_todo);
+                //checkbox에 for = id로 추가
+                new_item.find('.mdl-checkbox').attr('for', "list-checkbox-"+i);
+                new_item.find('.mdl-checkbox__input').attr('id', "list-checkbox-"+i);
+                // delete btn에 id추가
+                new_item.find('.smlie-delete').attr('id', "delete-btn-"+i);
+    
+
+           
+                $('#todo').append(new_item);
+
+                // all말고 ing-complete에 저장될 것 따로 clone
+                ing_item = new_item.clone();
+                // li에 clone id 부여
+                ing_item.attr('id', "list-"+i +"-clone");
+                // clone checkbox도 for=id 부여
+                ing_item.find('.mdl-checkbox').attr('for', "list-checkbox-"+i+"-clone");
+                ing_item.find('.mdl-checkbox__input').attr('id', "list-checkbox-"+i+"-clone");
+                // clone delete btn도 id부여
+                ing_item.find('.smlie-delete').attr('id', "delete-btn-"+i+"-clone");
+  
+
+
+                $('#ing').append(ing_item);
+
+
+                //$('#todo').append('<li class="mdl-list__item"><span class="mdl-list__item-primary-content">'+$('#input').val()+'</span><span class="mdl-list__item-secondary-action"><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-1"><input type="checkbox" class="mdl-checkbox__input" unchecked /></label></span></li>');
+
+                $('#input').val('');
+
+                saveTodo();
+
+            });
+
+
+            // TODO checkbox changed
+            $(document).on("click", ".mdl-checkbox__input", function () {
+                $(this).toggleClass('is-checked');
+                $(this).closest('label').toggleClass('is-checked');
+                //('selector').closest('selector') : 요소의 가장 가까운 selector 반환!!!
+                
+                if($(this).hasClass('is-checked')){
+                    // check 될 때
+                    // 1. all에서는 그냥 체크 되고
+                    // 2. ing에서는 completed로 옮겨져야함
+                    if($(this).closest('ul').attr('id') == "todo")  
+                    {
+                        //all에서 선택한 거면 all에서는 보이고 ing에 있는 거 옮겨야함
+                        clone_id = $(this).closest('li').attr('id') +"-clone";
+            
+                        new_item = $('#'+clone_id);
+
+                        new_item.find('.mdl-checkbox__input').addClass('is-checked');
+                        new_item.find('.mdl-checkbox__input').closest('label').addClass('is-checked');
+
+                        $('#completed').append(new_item);   
+                    
+                    } else if($(this).closest('ul').attr('id') == "ing"){
+
+                        new_item = $(this).closest('li');
+                        $('#completed').append(new_item);
+
+                        clone_id = $(this).closest('li').attr('id');
+                        origin_id = clone_id.slice(0, clone_id.length -6);
+
+                        $('#'+origin_id).find('.mdl-checkbox__input').addClass('is-checked');
+                        $('#'+origin_id).find('.mdl-checkbox__input').closest('label').addClass('is-checked');
+                    } 
+
+                } else {
+                    //check 풀릴 때
+                    //  1. all에서는 그냥 풀리고
+                    //  2. completed에서 ing로 옮겨져야함
+                    if($(this).closest('ul').attr('id') == "todo"){
+
+                        clone_id = $(this).closest('li').attr('id') +"-clone";
+
+                        new_item = $('#'+clone_id);
+
+                        new_item.find('.mdl-checkbox__input').removeClass('is-checked');
+                        new_item.find('.mdl-checkbox__input').closest('label').removeClass('is-checked');
+
+                        $('#ing').append(new_item);   
+
+                    } else if($(this).closest('ul').attr('id') == "completed"){
+                        new_item = $(this).closest('li');
+                        $('#ing').append(new_item);
+
+                        clone_id = $(this).closest('li').attr('id');
+                        origin_id = clone_id.slice(0, clone_id.length -6);
+
+                        $('#'+origin_id).find('.mdl-checkbox__input').removeClass('is-checked');
+                        $('#'+origin_id).find('.mdl-checkbox__input').closest('label').removeClass('is-checked');
+                    } 
+                }
+                saveTodo();
+            });
+
+
+        $(document).on('click', '.smlie-delete', function(){
+            // 1. all에서 삭제했을 때 all, clone까지 삭제
+            // 2. ing, completed 에서 삭제했을 때 all에 있는 것도 삭제
+
+            if($(this).closest('ul').attr('id') == "todo"){
+                //all에서 찾음
+
+                clone_id = $(this).closest('li').attr('id') +"-clone";
+                clone_item = $('#'+clone_id); 
+
+                clone_item.remove();
+                $(this).closest('li').remove();
+            }else{
+                //ing나 completed에서 찾음
+                clone_id = $(this).closest('li').attr('id');
+                origin_id = clone_id.slice(0, clone_id.length -6);
+
+                $(this).closest('li').remove();
+                $('#'+origin_id).remove();
+                
+            }
+            saveTodo();
+        });
+
+        var dialog = document.querySelector('dialog');
+        var pointer;
+
+        $(document).on('dblclick', 'li', function(){
+            // 1. all에서 수정했을 때 all, clone까지 반영
+            // 2. ing, completed 에서 수정했을 때 all에 있는 것도 반영
+            dialog.showModal();
+            pointer = $(this);
+            saveTodo();
+        });
+
+        dialog.querySelector('.close').addEventListener('click', function() {
+ 
+            
+            var edit_text = $('#edit-text').val();
+    
+            if(pointer.closest('ul').attr('id') == "todo"){
+                clone_id = pointer.attr('id')+"-clone";
+                pointer.find('.mdl-list__item-primary-content').text(edit_text);
+                $("#"+clone_id).find('.mdl-list__item-primary-content').text(edit_text);
+            } else{
+                clone_id = pointer.attr('id');
+                origin_id = pointer.attr('id').slice(0, clone_id.length -6);
+
+                pointer.find('.mdl-list__item-primary-content').text(edit_text);
+                $("#"+origin_id).find('.mdl-list__item-primary-content').text(edit_text);
+            }
+            saveTodo();
+            dialog.close();
+        });
+
+    });
+        
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

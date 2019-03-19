@@ -41,6 +41,11 @@
         #join-submit {
             margin-top: 2%;
         }
+
+        #load-btn {
+            margin-top: 2%;
+        }
+
     </style>
 
     <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet"> 
@@ -64,33 +69,32 @@
         - Form tag
             ○ Input, select, textarea
             ○ Input - type : text, email, phone, date, password, hidden
-
-
     -->
+
     <div class="header">
         <h1>회원가입 창</h1>
     </div>
     <div class="container">
-        <form autocomplete="off" action = " " method="post" id="join-form">
+        <form action = " " method="post" id="join-form">
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend">
                     <span class="input-group-text">아이디(Email)</span>
                 </div>
-                <input id="id" type="text" class="form-control" placeholder="Email ID를 입력하세요." aria-label="UserID" aria-describedby="addon-wrapping">
+                <input id="id" name="id" type="text" class="form-control" placeholder="Email ID를 입력하세요." aria-label="UserID" aria-describedby="addon-wrapping">
                 <div class="input-group-prepend">
                     <span class="input-group-text">비밀번호</span>
                 </div>
-                <input id="pw" type="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="addon-wrapping">
+                <input id="pw" name="pw" type="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="addon-wrapping">
             </div>
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend">
                     <span class="input-group-text">이름</span>
                 </div>
-                <input id="name" type="text" class="form-control" placeholder="한글 이름(2~4글자)" aria-label="Username" aria-describedby="addon-wrapping">
+                <input id="name" name="name" type="text" class="form-control" placeholder="한글 이름(2~4글자)" aria-label="Username" aria-describedby="addon-wrapping">
                 <div class="input-group-prepend">
                     <span id="zip-size" class="input-group-text">우편번호</span>
                 </div>
-                <input id="zipcode" type="text" class="form-control" placeholder="우편번호" aria-label="Zipcode" aria-describedby="addon-wrapping">
+                <input id="zipcode" name="zipcode" type="text" class="form-control" placeholder="우편번호" aria-label="Zipcode" aria-describedby="addon-wrapping">
                 <div class="input-group-append">
                     <button type="button" id="zipcode_search" class="btn btn-outline-secondary">찾기</button>
                 </div>  
@@ -99,17 +103,22 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">주소 & 상세주소</span>
                 </div>
-                <input id="address" type="text" placeholder="시 / 구 / 동" aria-label="Address" class="form-control">
-                <input id="address-detail" type="text" placeholder="번지수 / 동호수" aria-label="Address-detail" class="form-control">
+                <input id="address" name="address" type="text" aria-label="Address" class="form-control">
+                <input id="address-detail" name="address-detail" type="text" aria-label="Address-detail" class="form-control">
             </div>
             
             <button type="submit" id="join-submit" class="btn btn-outline-secondary">회원가입 확인</button>
+            <button type="button" id="load-btn" class="btn btn-outline-secondary">정보 불러오기</button>
         </form>
     </div>
    
 
     <script>
+        var storage_key = "content";  
+        
+
         $(function(){
+            
             // window.open 으로 열어야되는 건데 API가 js로 제공
             $('#zipcode_search').click(function(e){
                 new daum.Postcode({
@@ -133,9 +142,8 @@
                 */
                 var reg_id = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;    //email 형식 id 정규식
 
-                var reg_zc = /^\d{5}/;   // 5글자 우편번호
+                var reg_zc = /^\d{5}/   // 5글자 우편번호
 
-                var reg_addr = /[동|로|가]$/g; //법정동
 
                 if($('#id').val() == '') {
 
@@ -193,15 +201,61 @@
                     return false;
                 }
 
-                if(!reg_addr.test($('#address').val())) {
-                    alert("유효한 주소를 입력하세요. (시/구/동)");
-                    return false;
+                /*
+                : serialize 사용 :
+                var form_content = $('#join-form').serialize();
+
+                localStorage.setItem(storage_key, form_content);
+
+                */
+
+                // dictionary 이용
+                var content_dict = {};
+                var allInputs = $( ":input" );
+                console.log(allInputs);
+                for (var i in allInputs){
+                    if(allInputs[i].localName == "input"){
+                        var key = allInputs[i].id;
+                        var value = allInputs[i].value;
+                        content_dict[key] = value;
+                    }  
                 }
+                console.log(content_dict);
+
+                var content_string = JSON.stringify(content_dict);
+
+                localStorage.setItem(storage_key, content_string);
 
                 /* var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
                 alert(result);
                 */
                 return false;
+            });
+
+            $('#load-btn').click(function(){
+                /*
+                : serialize로 저장한 거 가져오기 : 
+                var form_content = localStorage.getItem(storage_key);
+                var split_data = form_content.split('&');
+                console.log(form_content.split('&'));
+                for(var i in split_data){
+                    var content_data = split_data[i].split('=');
+                    var key = content_data[0];
+
+                    // 저장될 때 % incoding 되기 때문에 다시 decode 해줘야함
+                    var data = decodeURIComponent(content_data[1]);
+
+                    $('#'+key).val(data);
+                }
+                */
+
+                //dictionary 이용
+                var content_string = localStorage.getItem(storage_key);
+                var content_dict = JSON.parse(content_string);
+                for (var key in content_dict){
+                    $('#'+key).val(content_dict[key]);
+                }
+
             });
         });
     

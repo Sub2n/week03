@@ -5,8 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Member List</title>
+
+    <style>
+        div.container {
+            width: 100%;
+            position: relative;
+            padding: 0;
+            text-align: center;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1%;
+        }
+
+        .header h1 {
+            font-family: 'Do Hyeon', sans-serif;
+        }
+
+        .card.member_card {
+            display: inline-block;
+            width: 18rem;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .card.member_card.sample-item {
+            display: none;
+        }
+        
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 </head>
 <body>
+
+    <div class="header">
+        <h1>회원 목록</h1>
+    </div>
+    <div id="cards" class="container">
+        <div class="card member_card sample-item">
+            <div class="card-body">
+                <h5 data-name = "name" class="card-title">이름</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li data-name="id" class="list-group-item">id</li>
+                <li data-name="pw" class="list-group-item">pw</li>
+                <li data-name="zp" class="list-group-item">우편번호</li>
+                <li data-name="addr" class="list-group-item">주소</li>
+                <li data-name="addr_d" class="list-group-item">상세주소</li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="card-link delete">Delete</a>
+            </div>
+        </div>
+    </div>  
+
+    <script type="text/javascript">
     
+        var storage_key = "member";
+        var members = JSON.parse(localStorage.getItem(storage_key));
+
+        function loadMember(){
+            // localStorage에서 member 가져와 뿌려줌
+            members = JSON.parse(localStorage.getItem(storage_key));
+            if(!members) members = [];
+           
+            // member dictionary의 length 알아냄
+             if(members != null){
+                for(var i in members){
+                    var new_member = $('div.sample-item').clone();
+                    var mem = members[i];
+                    new_member.removeClass('sample-item');
+
+                    new_member.find('h5[data-name = "name"]').text(mem['name']);
+                    new_member.find('li[data-name = "id"]').text("ID: "+mem['id']);
+                    new_member.find('li[data-name = "pw"]').text("PW: "+mem['pw']);
+                    new_member.find('li[data-name = "zp"]').text("우편번호: "+mem['zipcode']);
+                    new_member.find('li[data-name = "addr"]').text("주소: "+mem['address']);
+                    new_member.find('li[data-name = "addr_d"]').text("주소: "+mem['address-detail']);
+
+                    $('#cards').append(new_member);
+                }
+                
+             } else return;
+        }
+
+        function saveMember(){
+            // 이번에 가입 완료돼서 넘어온 member localStorage에 저장
+            var query = window.location.search.substr(1);
+            var get_data = query.split("&");
+            console.log(get_data);
+
+            var member_dict = {};
+            // member_dict['index'] = index;
+0
+            for(var i in get_data) {
+                var data = get_data[i].split("=");
+                var key = data[0];
+                var value = decodeURIComponent(data[1]);
+                console.log(key, value);
+                if( key == "address"){
+                    // 특수문자는 \로 escape 해줘야함
+                    value = value.replace(/\+/g, ' ');
+                }
+                member_dict[key] = value;
+            }
+            console.log(member_dict);
+
+            if(!members) members = [];
+
+            for(var i in members){
+                var mem = members[i];
+                if(member_dict['id'] == mem['id']) return;
+            }
+              
+            members.push(member_dict);
+
+            console.log(members); 
+
+            localStorage.setItem(storage_key, JSON.stringify(members));
+            
+        }
+
+        $(function(){
+            saveMember();
+            loadMember();
+        });
+
+
+    </script>
 </body>
 </html>

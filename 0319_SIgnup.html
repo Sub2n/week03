@@ -108,7 +108,6 @@
             </div>
             
             <button type="submit" id="join-submit" class="btn btn-outline-secondary">회원가입 확인</button>
-            <button type="button" id="load-btn" class="btn btn-outline-secondary">정보 불러오기</button>
         </form>
     </div>
    
@@ -209,28 +208,11 @@
 
                 */
 
-                // dictionary 이용
-                var content_dict = {};
-                // 모든 input tag를 가져오는 jQuery
-                var allInputs = $( ":input" );
-            
-                for (var i in allInputs){
-                    // allInput을 가져오면 button까지 딸려오므로 localName이 input인 것들만 넣어줌
-                    if(allInputs[i].localName == "input"){
-                        var key = allInputs[i].id;
-                        var value = allInputs[i].value;
-                        content_dict[key] = value;
-                    }  
-                }
                 
-                var content_string = JSON.stringify(content_dict);
-
-                localStorage.setItem(storage_key, content_string);
 
                 /* var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
                 alert(result);
                 */
-                return false;
             });
 
             $('#load-btn').click(function(){

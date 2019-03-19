@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Page</title>
+
+    <style>
+        div.container {
+            width: 50%;
+            position: relative;
+        }
+
+        .input-group-prepend {
+            width: 19%;
+            position: relative;
+        }
+
+        .input-group-text {
+            width: 100%;
+        }
+
+        #join-form {
+            text-align: center;
+        }
+
+        #zipcode {
+            width: 5%;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1%;
+        }
+
+        .header h1 {
+            font-family: 'Do Hyeon', sans-serif;
+        }
+
+        #join-submit {
+            margin-top: 2%;
+        }
+
+        #load-btn {
+            margin-top: 2%;
+        }
+
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!--
+        - 회원가입 창 만들기
+        (1) 아이디
+        (2) 비밀번호
+        (3) 이름
+        (4) 주소 - 우편번호, 주소, 주소 디테일, 우편번호 찾기
+        (5) 회원가입 확인버튼 : 누르면 form에 submit event 발생
+        회원가입 확인 버튼 눌렀을 때 모든 결과를 하나로 합쳐서 alert 창에 띄우기.
+
+        - Form tag
+            ○ Input, select, textarea
+            ○ Input - type : text, email, phone, date, password, hidden
+    -->
+
+    <div class="header">
+        <h1>회원가입 창</h1>
+    </div>
+    <div class="container">
+        <form action = "0319_Signup_ok.html" method="get" id="join-form">
+            <div class="input-group flex-nowrap">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">아이디(Email)</span>
+                </div>
+                <input id="id" name="id" type="text" class="form-control" placeholder="Email ID를 입력하세요." aria-label="UserID" aria-describedby="addon-wrapping">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">비밀번호</span>
+                </div>
+                <input id="pw" name="pw" type="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">이름</span>
+                </div>
+                <input id="name" name="name" type="text" class="form-control" placeholder="한글 이름(2~4글자)" aria-label="Username" aria-describedby="addon-wrapping">
+                <div class="input-group-prepend">
+                    <span id="zip-size" class="input-group-text">우편번호</span>
+                </div>
+                <input id="zipcode" name="zipcode" type="text" class="form-control" placeholder="우편번호" aria-label="Zipcode" aria-describedby="addon-wrapping">
+                <div class="input-group-append">
+                    <button type="button" id="zipcode_search" class="btn btn-outline-secondary">찾기</button>
+                </div>  
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">주소 & 상세주소</span>
+                </div>
+                <input id="address" name="address" type="text" aria-label="Address" class="form-control">
+                <input id="address-detail" name="address-detail" type="text" aria-label="Address-detail" class="form-control">
+            </div>
+            
+            <button type="submit" id="join-submit" class="btn btn-outline-secondary">회원가입 확인</button>
+            <button type="button" id="load-btn" class="btn btn-outline-secondary">정보 불러오기</button>
+        </form>
+    </div>
+   
+
+    <script>
+        var storage_key = "content";  
+        
+
+        $(function(){
+            
+            // window.open 으로 열어야되는 건데 API가 js로 제공
+            $('#zipcode_search').click(function(e){
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                        console.log(data);
+                      
+                        $('#zipcode').val(data.zonecode);
+                        $('#address').val(data.sido + " " + data.sigungu + " "+data.bname);
+    
+                    }
+                }).open();
+            });
+            // 정규표현식 - email, 비밀번호, 아이디
+            $('#join-form').submit(function(){
+                var reg_name = /^[가-힣]{2,4}$/;     //2~4글자 한글 이름
+                var reg_pw = /^[A-Za-z0-9]{6,12}$/; //숫자와 문자 포함 형태의 6~12자리 이내의 비밀번호 정규식
+                /* 특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 비밀번호 정규식
+                var regex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+                */
+                var reg_id = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;    //email 형식 id 정규식
+
+                var reg_zc = /^\d{5}/   // 5글자 우편번호
+
+
+                if($('#id').val() == '') {
+
+                    alert("ID를 입력하세요.");
+                    return false;
+                }
+                if($('#name').val() == '') {
+
+                    alert("이름을 입력하세요.");
+                    return false;
+                }
+                if($('#pw').val() == '') {
+
+                    alert("비밀번호를 입력하세요.");
+                    return false;
+                }
+                if($('#address').val() == '') {
+        
+                    alert("주소를 입력하세요.");
+                    return false;
+                }
+                if($('#address-detail').val() == '') {
+
+                    alert("상세 주소를 입력하세요.");
+                    return false;
+                }
+                if($('#zipcode').val() == '') {
+
+                    alert("우편번호를 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_id.test($('#id').val())) {
+                    alert("올바른 email형식 ID를 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_pw.test($('#pw').val())) {
+                    alert("숫자와 문자 포함 형태의 6~12자리 이내의 비밀번호를 입력하세요");
+                    return false;
+                }
+
+                if(!reg_name.test($('#name').val())) {
+                    alert("2~4글자 사이의 한글 이름을 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_name.test($('#name').val())) {
+                    alert("2~4글자 사이의 한글 이름을 입력하세요.");
+                    return false;
+                }
+
+                if(!reg_zc.test($('#zipcode').val())) {
+                    alert("유효한 신우편번호를 입력하세요.");
+                    return false;
+                }
+
+                /*
+                : serialize 사용 :
+                var form_content = $('#join-form').serialize();
+
+                localStorage.setItem(storage_key, form_content);
+
+                */
+
+                // dictionary 이용
+                var content_dict = {};
+                // 모든 input tag를 가져오는 jQuery
+                var allInputs = $( ":input" );
+            
+                for (var i in allInputs){
+                    // allInput을 가져오면 button까지 딸려오므로 localName이 input인 것들만 넣어줌
+                    if(allInputs[i].localName == "input"){
+                        var key = allInputs[i].id;
+                        var value = allInputs[i].value;
+                        content_dict[key] = value;
+                    }  
+                }
+                
+                var content_string = JSON.stringify(content_dict);
+
+                localStorage.setItem(storage_key, content_string);
+
+                /* var result = "ID: "+$('#id').val()+"\nName: "+$('#name').val()+"\nAddress: "+$('#address').val()+"\n상세주소: "+$('#address-detail').val()+"\n우편번호: "+$('#zipcode').val();
+                alert(result);
+                */
+                return false;
+            });
+
+            $('#load-btn').click(function(){
+                /*
+                : serialize로 저장한 거 가져오기 : 
+                var form_content = localStorage.getItem(storage_key);
+                var split_data = form_content.split('&');
+                console.log(form_content.split('&'));
+                for(var i in split_data){
+                    var content_data = split_data[i].split('=');
+                    var key = content_data[0];
+
+                    // 저장될 때 % incoding 되기 때문에 다시 decode 해줘야함
+                    var data = decodeURIComponent(content_data[1]);
+
+                    $('#'+key).val(data);
+                }
+                */
+
+                // dictionary 이용
+                // dictionary로 저장할 때는 값들이 incoding되지 않음!!!
+                var content_string = localStorage.getItem(storage_key);
+                var content_dict = JSON.parse(content_string);
+                for (var key in content_dict){
+                    $('#'+key).val(content_dict[key]);
+                }
+
+            });
+        });
+    
+    </script>
+</body>
+    <!--
+        과제 1. 입력 값이 있는지 없는지 test validation
+        과제 2. 정규표현식을 이용한 validation
+
+    -->
+</html>

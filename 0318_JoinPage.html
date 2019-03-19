@@ -211,17 +211,18 @@
 
                 // dictionary 이용
                 var content_dict = {};
+                // 모든 input tag를 가져오는 jQuery
                 var allInputs = $( ":input" );
-                console.log(allInputs);
+            
                 for (var i in allInputs){
+                    // allInput을 가져오면 button까지 딸려오므로 localName이 input인 것들만 넣어줌
                     if(allInputs[i].localName == "input"){
                         var key = allInputs[i].id;
                         var value = allInputs[i].value;
                         content_dict[key] = value;
                     }  
                 }
-                console.log(content_dict);
-
+                
                 var content_string = JSON.stringify(content_dict);
 
                 localStorage.setItem(storage_key, content_string);
@@ -249,7 +250,8 @@
                 }
                 */
 
-                //dictionary 이용
+                // dictionary 이용
+                // dictionary로 저장할 때는 값들이 incoding되지 않음!!!
                 var content_string = localStorage.getItem(storage_key);
                 var content_dict = JSON.parse(content_string);
                 for (var key in content_dict){
